@@ -1,0 +1,21 @@
+{
+  "profile": {
+    "name": "عبدالله أحمد",
+    "role": "مصمم ومطور واجهات",
+    "bio": "أصنع تجارب رقمية هادئة وواضحة.",
+    "email": ""
+  },
+  "projects": [
+    {
+      "id": "4f033612-c0fb-4454-8b38-7e0147ae5272",
+      "title": "ulg",
+      "type": "عمل",
+      "url": "",
+      "color": "#4f4ce6"
+    }
+  ],
+  "settings": {
+    "siteTitle": "My Profile",
+    "availability": true
+  }
+}

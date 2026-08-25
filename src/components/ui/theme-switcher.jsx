@@ -1,22 +1,7 @@
-import { useEffect, useState } from 'react'
-
-const validThemes = new Set(['system', 'light', 'dark'])
-
-function getInitialTheme() {
-  const savedTheme = localStorage.getItem('theme')
-  return validThemes.has(savedTheme) ? savedTheme : 'light'
-}
+import { useThemePreference } from './theme-provider.jsx'
 
 export function ThemeSwitcher() {
-  const [theme, setTheme] = useState(getInitialTheme)
-
-  useEffect(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    const isDark = theme === 'dark' || (theme === 'system' && prefersDark)
-
-    document.documentElement.classList.toggle('dark', isDark)
-    localStorage.setItem('theme', theme)
-  }, [theme])
+  const { theme, setTheme } = useThemePreference()
 
   return (
     <fieldset className="theme-switcher">
