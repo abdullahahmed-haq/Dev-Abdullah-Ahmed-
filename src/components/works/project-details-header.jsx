@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight, Pencil } from 'lucide-react'
 import { LanguageSwitcher } from '../ui/language-switcher.jsx'
 import { ThemeSwitcher } from '../ui/theme-switcher.jsx'
 
-export default function ProjectDetailsHeader({ language, onLanguageChange, text, showEdit, onEdit, onBack, preview = false }) {
+export default function ProjectDetailsHeader({ language, onLanguageChange, text, showEdit, onBack, preview = false }) {
   const BackArrow = language === 'ar' ? ArrowRight : ArrowLeft
   const backContent = <><BackArrow aria-hidden="true" />{text.backToWorks}</>
 
@@ -17,12 +17,12 @@ export default function ProjectDetailsHeader({ language, onLanguageChange, text,
           onBack()
         }}>{backContent}</a>
       )}
-      <div className="project-details-actions">
-        <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
+      <div className="project-details-actions" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <ThemeSwitcher />
+        <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
       </div>
       {showEdit && (
-        <button className="project-details-edit" type="button" onClick={onEdit}><Pencil aria-hidden="true" />{text.editProject}</button>
+        <button className="project-details-edit" type="button"><Pencil aria-hidden="true" />{text.editProject}</button>
       )}
     </header>
   )

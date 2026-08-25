@@ -164,7 +164,7 @@ html[dir='ltr'] .dashboard-sidebar { grid-column: 1; direction: ltr; }
 html[dir='ltr'] .dashboard-content { grid-column: 2; justify-self: start; direction: ltr; }
 html[dir='ltr'] .dashboard-page.is-sidebar-collapsed { grid-template-columns: 76px minmax(0, 1fr); }
 .dashboard-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 42px; }
-.dashboard-header-actions { display: flex; flex: 0 0 auto; flex-direction: column; align-items: flex-end; gap: 8px; }.dashboard-header-switchers { display: flex; align-items: center; gap: 8px; direction: ltr; }.dashboard-header-switchers .language-switcher, .dashboard-header-switchers .theme-switcher { border-color: var(--dashboard-surface-border); background: var(--dashboard-surface); box-shadow: none; }
+.dashboard-header-actions { display: flex; flex: 0 0 auto; flex-direction: column; align-items: flex-end; gap: 8px; }.dashboard-header-switchers { display: flex; align-items: center; gap: 8px; }.dashboard-header-switchers .language-switcher, .dashboard-header-switchers .theme-switcher { border-color: var(--dashboard-surface-border); background: var(--dashboard-surface); box-shadow: none; }
 .dashboard-header p, .dashboard-card h2 span, .dashboard-project span, .dashboard-empty, .dashboard-stat-card small { color: var(--dashboard-muted); font-size: 13px; }
 .dashboard-header p { margin: 0 0 6px; }
 .dashboard-header h1 { margin: 0; font-size: clamp(32px, 4vw, 48px); font-weight: 700; }
@@ -427,6 +427,22 @@ html[dir='ltr'] .dashboard-page.is-sidebar-collapsed { grid-template-columns: 76
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.floating-menu-fade {
+  position: fixed;
+  z-index: 90;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: clamp(140px, 20vh, 220px);
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in srgb, var(--page-background) 68%, transparent) 46%,
+    var(--page-background) 82%
+  );
 }
 
 .liquid-menu-surface {

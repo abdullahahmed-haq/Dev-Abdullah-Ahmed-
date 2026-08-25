@@ -46,6 +46,7 @@ export default function LiquidMorphFloatingMenu({ items, menuLabel, openLabel, c
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef(null)
   const reducedMotion = useReducedMotion()
+  const openHeight = 116 + items.length * 48
 
   useEffect(() => {
     if (!isOpen) return undefined
@@ -72,7 +73,7 @@ export default function LiquidMorphFloatingMenu({ items, menuLabel, openLabel, c
           onClick={() => !isOpen && setIsOpen(true)}
           animate={{
             width: isOpen ? 280 : 150,
-            height: isOpen ? 260 : 48,
+            height: isOpen ? openHeight : 48,
             borderRadius: isOpen ? 32 : 72,
           }}
           whileHover={isOpen ? undefined : { scale: 1.04 }}

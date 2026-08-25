@@ -7,11 +7,18 @@
   },
   "projects": [
     {
+      "id": "fe1a92eb-b579-475b-8fde-e484daccb331",
+      "title": "عبدالله",
+      "type": "اعمال شغب",
+      "url": "",
+      "color": "#d5aa21"
+    },
+    {
       "id": "4f033612-c0fb-4454-8b38-7e0147ae5272",
       "title": "ulg",
       "type": "عمل",
       "url": "",
-      "color": "#4f4ce6"
+      "color": "#4c6be6"
     }
   ],
   "settings": {

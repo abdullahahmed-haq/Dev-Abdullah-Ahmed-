@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ArrowLeft, ArrowRight, LayoutDashboard, Pencil, Plus, Trash2 } from 'lucide-react'
 import { isAdminSession, refreshAdminSession } from '../../lib/admin-auth.js'
 import { DEFAULT_PROJECT_COLOR, getSiteContent, loadSiteContent, saveSiteContent } from '../../lib/site-content.js'
@@ -34,11 +35,44 @@ function getTextLanguage(value) {
   return /[\u0600-\u06ff]/.test(value || '') ? 'arabic' : 'english'
 }
 
-function ProjectFolder({ project, index, text, isAdmin, menuOpen, onOpenDetails, onToggleMenu, onEdit, onDelete }) {
+const PROJECT_MENU_HEIGHT = 108
+const PROJECT_MENU_GAP = 7
+
+function getProjectMenuPlacement(bounds) {
+  const fadeHeight = Math.min(220, Math.max(140, window.innerHeight * 0.2))
+  const safeBottom = window.innerHeight - fadeHeight
+  const spaceBelow = safeBottom - bounds.bottom - PROJECT_MENU_GAP
+  const spaceAbove = bounds.top - PROJECT_MENU_GAP - 12
+
+  if (spaceBelow >= PROJECT_MENU_HEIGHT) return 'below'
+  if (spaceAbove >= PROJECT_MENU_HEIGHT) return 'above'
+  return spaceAbove > spaceBelow ? 'above' : 'below'
+}
+
+function ProjectFolder({ project, index, text, isAdmin, menuOpen, menuPlacement, onOpenDetails, onToggleMenu, onMenuPositionChange, onEdit, onDelete }) {
+  const moreButtonRef = useRef(null)
+  const reducedMotion = useReducedMotion()
   const type = project.type || text.uncategorized
   const projectUrl = getSafeProjectUrl(project.url)
   const titleLanguage = getTextLanguage(project.title)
   const typeLanguage = getTextLanguage(type)
+
+  useEffect(() => {
+    if (!menuOpen) return undefined
+
+    const updatePlacement = () => {
+      const bounds = moreButtonRef.current?.getBoundingClientRect()
+      if (bounds) onMenuPositionChange(project.id, getProjectMenuPlacement(bounds))
+    }
+
+    updatePlacement()
+    window.addEventListener('resize', updatePlacement)
+    window.addEventListener('scroll', updatePlacement, true)
+    return () => {
+      window.removeEventListener('resize', updatePlacement)
+      window.removeEventListener('scroll', updatePlacement, true)
+    }
+  }, [menuOpen, onMenuPositionChange, project.id])
 
   return (
     <article className="work-folder-card">
@@ -63,13 +97,24 @@ function ProjectFolder({ project, index, text, isAdmin, menuOpen, onOpenDetails,
         {projectUrl && <a href={projectUrl} target="_blank" rel="noreferrer">{project.url.replace(/^https?:\/\//, '')}</a>}
         {isAdmin && (
           <div className="work-project-admin">
-            <button className="work-project-more" type="button" aria-label={`${text.moreActions}: ${project.title}`} aria-expanded={menuOpen} onClick={onToggleMenu}>...</button>
-            {menuOpen && (
-              <div className="work-project-menu" role="menu">
-                <button type="button" role="menuitem" onClick={onEdit}><Pencil aria-hidden="true" />{text.editWork}</button>
-                <button className="is-danger" type="button" role="menuitem" onClick={onDelete}><Trash2 aria-hidden="true" />{text.deleteWork}</button>
-              </div>
-            )}
+            <button ref={moreButtonRef} className="work-project-more" type="button" aria-label={`${text.moreActions}: ${project.title}`} aria-expanded={menuOpen} onClick={(event) => onToggleMenu(event.currentTarget.getBoundingClientRect())}>
+              <span className="work-project-more-dots" aria-hidden="true"><i /><i /><i /></span>
+            </button>
+            <AnimatePresence>
+              {menuOpen && (
+                <motion.div
+                  className={menuPlacement === 'above' ? 'work-project-menu is-above' : 'work-project-menu'}
+                  role="menu"
+                  initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: menuPlacement === 'above' ? 6 : -6, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: menuPlacement === 'above' ? 5 : -5, scale: 0.98 }}
+                  transition={{ duration: reducedMotion ? 0.12 : 0.24, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <button type="button" role="menuitem" onClick={onEdit}><Pencil aria-hidden="true" />{text.editWork}</button>
+                  <button className="is-danger" type="button" role="menuitem" onClick={onDelete}><Trash2 aria-hidden="true" />{text.deleteWork}</button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         )}
       </div>
@@ -99,6 +144,38 @@ export default function WorksPage({ language, onLanguageChange, navigate }) {
   }, [])
 
   const closeEditor = useCallback(() => setEditor(null), [])
+
+  const updateMenuPlacement = useCallback((projectId, placement) => {
+    setActiveMenu((current) => {
+      if (!current || current.id !== projectId || current.placement === placement) return current
+      return { ...current, placement }
+    })
+  }, [])
+
+  const toggleProjectMenu = useCallback((projectId, bounds) => {
+    setActiveMenu((current) => current?.id === projectId
+      ? null
+      : { id: projectId, placement: getProjectMenuPlacement(bounds) })
+  }, [])
+
+  useEffect(() => {
+    if (!activeMenu) return undefined
+
+    const closeOnOutsidePress = (event) => {
+      const target = event.target instanceof Element ? event.target : null
+      if (!target?.closest('.work-project-admin')) setActiveMenu(null)
+    }
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setActiveMenu(null)
+    }
+
+    document.addEventListener('pointerdown', closeOnOutsidePress)
+    document.addEventListener('keydown', closeOnEscape)
+    return () => {
+      document.removeEventListener('pointerdown', closeOnOutsidePress)
+      document.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [activeMenu])
 
   async function storeProjects(projects) {
     const nextContent = { ...content, projects }
@@ -138,10 +215,10 @@ export default function WorksPage({ language, onLanguageChange, navigate }) {
     <main className="works-page" aria-labelledby="works-title">
       <header className="works-topbar">
         <a className="works-home-link" href="/home"><BackArrow aria-hidden="true" />{text.home}</a>
-        <div className="works-controls">
-          <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
-          <ThemeSwitcher />
+        <div className="works-controls" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <a className="works-dashboard-link" href="/"><LayoutDashboard aria-hidden="true" /><span>{text.dashboard}</span></a>
+          <ThemeSwitcher />
+          <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
         </div>
       </header>
 
@@ -166,13 +243,15 @@ export default function WorksPage({ language, onLanguageChange, navigate }) {
               index={index}
               text={text}
               isAdmin={admin}
-              menuOpen={activeMenu === project.id}
+              menuOpen={activeMenu?.id === project.id}
+              menuPlacement={activeMenu?.placement}
               onOpenDetails={(origin) => {
                 if (openingProject) return
                 setActiveMenu(null)
                 setOpeningProject({ project, origin })
               }}
-              onToggleMenu={() => setActiveMenu((current) => current === project.id ? null : project.id)}
+              onToggleMenu={(bounds) => toggleProjectMenu(project.id, bounds)}
+              onMenuPositionChange={updateMenuPlacement}
               onEdit={() => { setEditor({ mode: 'edit', project }); setActiveMenu(null) }}
               onDelete={() => deleteProject(project)}
             />

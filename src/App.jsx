@@ -3,10 +3,11 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ThemeSwitcher } from './components/ui/theme-switcher.jsx'
 import LiquidMorphFloatingMenu from './components/ui/liquid-morph-floating-menu.jsx'
 import { LanguageSwitcher } from './components/ui/language-switcher.jsx'
-import GradualBlur from './components/ui/gradual-blur.jsx'
 import Dashboard from './components/dashboard/dashboard.jsx'
 import WorksPage from './components/works/works-page.jsx'
 import ProjectDetailsPage from './components/works/project-details-page.jsx'
+import BlogPage from './components/blog/blog-page.jsx'
+import ContactPage from './components/contact/contact-page.jsx'
 import { loadSiteContent } from './lib/site-content.js'
 import { applyLanguagePreference, getLanguagePreference, saveLanguagePreference } from './lib/preferences.js'
 
@@ -16,14 +17,14 @@ const copy = {
     menuLabel: 'القائمة',
     openLabel: 'فتح القائمة',
     closeLabel: 'إغلاق القائمة',
-    items: ['الرئيسية', 'الأعمال', 'تواصل'],
+    items: ['الرئيسية', 'الأعمال', 'مدونة', 'تواصل'],
   },
   en: {
     pageLabel: 'Home page',
     menuLabel: 'Menu',
     openLabel: 'Open menu',
     closeLabel: 'Close menu',
-    items: ['Home', 'Works', 'Contact'],
+    items: ['Home', 'Works', 'Blog', 'Contact'],
   },
 }
 
@@ -33,6 +34,21 @@ function getInitialLanguage() {
 
 function normalizePathname(pathname) {
   return pathname.replace(/\/+$/, '') || '/'
+}
+
+function getMenuLabel(pathname, text) {
+  if (pathname === '/home') return text.menuLabel
+  if (pathname.startsWith('/works')) return text.items[1]
+  if (pathname === '/blog') return text.items[2]
+  if (pathname === '/contact') return text.items[3]
+  return text.menuLabel
+}
+
+function isPublicPath(pathname) {
+  return pathname === '/home'
+    || pathname.startsWith('/works')
+    || pathname === '/blog'
+    || pathname === '/contact'
 }
 
 export default function App() {
@@ -133,6 +149,10 @@ export default function App() {
     pageContent = <ProjectDetailsPage projectId={projectId} language={language} onLanguageChange={setLanguage} navigate={navigate} goBack={goBack} />
   } else if (pathname === '/works') {
     pageContent = <WorksPage language={language} onLanguageChange={setLanguage} navigate={navigate} />
+  } else if (pathname === '/blog') {
+    pageContent = <BlogPage language={language} onLanguageChange={setLanguage} />
+  } else if (pathname === '/contact') {
+    pageContent = <ContactPage language={language} />
   } else if (pathname !== '/home') {
     pageContent = <Dashboard language={language} onLanguageChange={setLanguage} />
   } else {
@@ -144,39 +164,38 @@ export default function App() {
         <div className="theme-switcher-position">
           <ThemeSwitcher />
         </div>
-        <GradualBlur
-          target="page"
-          position="bottom"
-          height="12rem"
-          strength={1.5}
-          divCount={6}
-          curve="bezier"
-          exponential
-          opacity={0.9}
-          zIndex={-50}
-        />
-        <LiquidMorphFloatingMenu
-          items={text.items}
-          menuLabel={text.menuLabel}
-          openLabel={text.openLabel}
-          closeLabel={text.closeLabel}
-          onItemSelect={(index) => {
-            if (index === 1) navigate('/works')
-          }}
-        />
       </main>
     )
   }
 
   return (
-    <motion.div
-      className="app-route"
-      key={pathname}
-      initial={{ opacity: reducedMotion ? 1 : 0.96 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: reducedMotion ? 0 : 0.14, ease: [0.22, 1, 0.36, 1] }}
-    >
-      {pageContent}
-    </motion.div>
+    <>
+      <motion.div
+        className="app-route"
+        key={pathname}
+        initial={{ opacity: reducedMotion ? 1 : 0.96 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: reducedMotion ? 0 : 0.14, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {pageContent}
+      </motion.div>
+      {isPublicPath(pathname) && (
+        <>
+          <div className="floating-menu-fade" aria-hidden="true" />
+          <LiquidMorphFloatingMenu
+            items={text.items}
+            menuLabel={getMenuLabel(pathname, text)}
+            openLabel={text.openLabel}
+            closeLabel={text.closeLabel}
+            onItemSelect={(index) => {
+              if (index === 0) navigate('/home')
+              if (index === 1) navigate('/works')
+              if (index === 2) navigate('/blog')
+              if (index === 3) navigate('/contact')
+            }}
+          />
+        </>
+      )}
+    </>
   )
 }

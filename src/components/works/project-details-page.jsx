@@ -8,11 +8,11 @@ import './project-details-page.css'
 
 const copy = {
   ar: {
-    pageLabel: 'تفاصيل المشروع', backToWorks: 'العودة إلى الأعمال', editProject: 'تعديل المشروع', missingTitle: 'هذا المشروع غير موجود', missingText: 'ربما تم حذف المشروع أو تغيير رابطه.',
+    pageLabel: 'تفاصيل المشروع', backToWorks: 'العودة إلى الأعمال', editProject: 'تعديل', missingTitle: 'هذا المشروع غير موجود', missingText: 'ربما تم حذف المشروع أو تغيير رابطه.',
     editorEyebrow: 'إدارة الأعمال', editWork: 'تعديل المشروع', addWork: 'إضافة عمل جديد', closeEditor: 'إغلاق النافذة', projectName: 'اسم المشروع', category: 'التصنيف', url: 'الرابط', folderColor: 'لون المجلد', cancel: 'إلغاء', save: 'حفظ المشروع', saveFailed: 'تعذر حفظ التعديل على الخادم.',
   },
   en: {
-    pageLabel: 'Project details', backToWorks: 'Back to works', editProject: 'Edit project', missingTitle: 'Project not found', missingText: 'The project may have been deleted or its link changed.',
+    pageLabel: 'Project details', backToWorks: 'Back to works', editProject: 'Edit', missingTitle: 'Project not found', missingText: 'The project may have been deleted or its link changed.',
     editorEyebrow: 'Works manager', editWork: 'Edit project', addWork: 'Add new work', closeEditor: 'Close dialog', projectName: 'Project name', category: 'Category', url: 'URL', folderColor: 'Folder colour', cancel: 'Cancel', save: 'Save project', saveFailed: 'The change could not be saved on the server.',
   },
 }
@@ -68,7 +68,6 @@ export default function ProjectDetailsPage({ projectId, language, onLanguageChan
         onLanguageChange={onLanguageChange}
         text={text}
         showEdit={admin && Boolean(project)}
-        onEdit={() => setEditorOpen(true)}
         onBack={() => goBack('/works')}
       />
 

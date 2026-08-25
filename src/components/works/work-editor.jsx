@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import { DEFAULT_PROJECT_COLOR } from '../../lib/site-content.js'
+import ProjectColorPicker from '../ui/project-color-picker.jsx'
 
 export default function WorkEditor({ project, text, onSave, onClose }) {
   const [form, setForm] = useState(() => project || { title: '', type: '', url: '', color: DEFAULT_PROJECT_COLOR })
@@ -27,7 +28,7 @@ export default function WorkEditor({ project, text, onSave, onClose }) {
           <label>{text.projectName}<input autoFocus value={form.title} onChange={(event) => setForm({ ...form, title: event.target.value })} required /></label>
           <label>{text.category}<input value={form.type || ''} onChange={(event) => setForm({ ...form, type: event.target.value })} /></label>
           <label>{text.url}<input dir="ltr" type="url" value={form.url || ''} onChange={(event) => setForm({ ...form, url: event.target.value })} placeholder="https://" /></label>
-          <label className="work-editor-color">{text.folderColor}<span><input type="color" value={form.color || DEFAULT_PROJECT_COLOR} onChange={(event) => setForm({ ...form, color: event.target.value })} /><output>{(form.color || DEFAULT_PROJECT_COLOR).toUpperCase()}</output></span></label>
+          <ProjectColorPicker label={text.folderColor} value={form.color || DEFAULT_PROJECT_COLOR} onChange={(color) => setForm({ ...form, color })} />
           <div className="work-editor-actions"><button type="button" onClick={onClose}>{text.cancel}</button><button type="submit">{text.save}</button></div>
         </form>
       </section>

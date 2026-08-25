@@ -129,9 +129,9 @@ export default function Dashboard({ language = 'ar', onLanguageChange }) {
             <h1>{sections.find((section) => section.id === activeSection)?.label}</h1>
           </div>
           <div className="dashboard-header-actions">
-            <div className="dashboard-header-switchers">
-              <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
+            <div className="dashboard-header-switchers" dir={language === 'ar' ? 'rtl' : 'ltr'}>
               <ThemeSwitcher />
+              <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
             </div>
             <span className={saved || saveFailed ? 'dashboard-save-status is-visible' : 'dashboard-save-status'}>{saveFailed ? text.saveFailed : text.saved}</span>
           </div>

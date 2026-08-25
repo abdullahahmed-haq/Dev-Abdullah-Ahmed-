@@ -1,0 +1,127 @@
+.blog-page {
+  min-height: 100vh;
+  padding: 22px clamp(20px, 5vw, 72px) 80px;
+  background: var(--page-background);
+  color: var(--page-text);
+}
+
+.blog-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.blog-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.blog-home-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.blog-controls {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.blog-controls .theme-switcher,
+.blog-controls .language-switcher {
+  position: static;
+  box-shadow: none;
+}
+
+.blog-intro {
+  max-width: 780px;
+  margin: clamp(72px, 12vw, 150px) auto 74px;
+  text-align: center;
+}
+
+.blog-intro p {
+  margin: 0 0 8px;
+  color: #8c7e6e;
+  font-size: 13px;
+}
+
+.blog-intro h1 {
+  margin: 0;
+  font-size: clamp(64px, 11vw, 150px);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+}
+
+html[lang='en'] .blog-intro h1 {
+  letter-spacing: 0.02em;
+}
+
+.blog-intro span {
+  display: block;
+  max-width: 540px;
+  margin: 24px auto 0;
+  color: #76695b;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.blog-empty {
+  display: grid;
+  width: min(860px, 100%);
+  min-height: 210px;
+  margin: 0 auto;
+  padding: clamp(26px, 5vw, 48px);
+  align-items: center;
+  grid-template-columns: auto 1fr;
+  gap: clamp(24px, 5vw, 64px);
+  border-block: 1px solid var(--theme-border);
+}
+
+.blog-empty > span {
+  color: #9a8c7e;
+  font-family: var(--font-english);
+  font-size: 12px;
+}
+
+.blog-empty h2 {
+  margin: 0 0 8px;
+  font-size: clamp(30px, 4vw, 46px);
+}
+
+.blog-empty p {
+  max-width: 520px;
+  margin: 0;
+  color: #76695b;
+  line-height: 1.8;
+}
+
+:root.dark .blog-intro p,
+:root.dark .blog-intro span,
+:root.dark .blog-empty p {
+  color: #bdb2a6;
+}
+
+@media (max-width: 620px) {
+  .blog-page {
+    padding: 14px 14px 56px;
+  }
+
+  .blog-intro {
+    margin: 68px auto 52px;
+  }
+
+  .blog-intro h1 {
+    font-size: clamp(58px, 23vw, 94px);
+  }
+
+  .blog-empty {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
