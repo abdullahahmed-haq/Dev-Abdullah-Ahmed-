@@ -55,6 +55,24 @@ async function startServer(t) {
 test('server security boundaries', async (t) => {
   const baseUrl = await startServer(t)
 
+  await t.test('serves public blog articles by locale without exposing unavailable languages', async () => {
+    const arabic = await fetch(`${baseUrl}/api/blog/ar/posts`)
+    const english = await fetch(`${baseUrl}/api/blog/en/posts`)
+    const arabicBody = await arabic.json()
+    const englishBody = await english.json()
+
+    assert.equal(arabic.status, 200)
+    assert.equal(english.status, 200)
+    assert.equal(arabicBody.posts.some((post) => post.id === 'quiet-interfaces'), false)
+    assert.equal(englishBody.posts.some((post) => post.id === 'digital-archive-notes'), false)
+    assert.equal((await fetch(`${baseUrl}/api/blog/ar/posts/missing`)).status, 404)
+    assert.match(await (await fetch(`${baseUrl}/blog/ar/rss.xml`)).text(), /<rss version="2\.0">/)
+    assert.match(await (await fetch(`${baseUrl}/sitemap.xml`)).text(), /blog\/ar/)
+    const articleHtml = await (await fetch(`${baseUrl}/blog/en/${encodeURIComponent(englishBody.posts[0].slug)}`)).text()
+    assert.match(articleHtml, /property="og:title"/)
+    assert.match(articleHtml, new RegExp(englishBody.posts[0].title))
+  })
+
   await t.test('sets browser security headers', async () => {
     const response = await fetch(baseUrl)
     assert.equal(response.headers.get('x-frame-options'), 'DENY')

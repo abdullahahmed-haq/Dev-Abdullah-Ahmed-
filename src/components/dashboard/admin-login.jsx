@@ -48,7 +48,7 @@ export default function AdminLogin({ language, onLanguageChange, onAuthenticated
     <main className="admin-login-page">
       <header className="admin-login-topbar">
         <a href="/home"><BackArrow aria-hidden="true" />{text.back}</a>
-        <div className="admin-login-switchers" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="admin-login-switchers switcher-cluster" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <ThemeSwitcher />
           <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
         </div>

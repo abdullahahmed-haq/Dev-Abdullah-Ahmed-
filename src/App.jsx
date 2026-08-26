@@ -7,6 +7,7 @@ import Dashboard from './components/dashboard/dashboard.jsx'
 import WorksPage from './components/works/works-page.jsx'
 import ProjectDetailsPage from './components/works/project-details-page.jsx'
 import BlogPage from './components/blog/blog-page.jsx'
+import BlogArticlePage from './components/blog/blog-article-page.jsx'
 import ContactPage from './components/contact/contact-page.jsx'
 import { loadSiteContent } from './lib/site-content.js'
 import { applyLanguagePreference, getLanguagePreference, saveLanguagePreference } from './lib/preferences.js'
@@ -39,7 +40,7 @@ function normalizePathname(pathname) {
 function getMenuLabel(pathname, text) {
   if (pathname === '/home') return text.menuLabel
   if (pathname.startsWith('/works')) return text.items[1]
-  if (pathname === '/blog') return text.items[2]
+  if (pathname.startsWith('/blog')) return text.items[2]
   if (pathname === '/contact') return text.items[3]
   return text.menuLabel
 }
@@ -47,7 +48,7 @@ function getMenuLabel(pathname, text) {
 function isPublicPath(pathname) {
   return pathname === '/home'
     || pathname.startsWith('/works')
-    || pathname === '/blog'
+    || pathname.startsWith('/blog')
     || pathname === '/contact'
 }
 
@@ -150,7 +151,15 @@ export default function App() {
   } else if (pathname === '/works') {
     pageContent = <WorksPage language={language} onLanguageChange={setLanguage} navigate={navigate} />
   } else if (pathname === '/blog') {
-    pageContent = <BlogPage language={language} onLanguageChange={setLanguage} />
+    pageContent = <BlogPage locale={language} language={language} onLanguageChange={setLanguage} navigate={navigate} redirectToLocale />
+  } else if (pathname.startsWith('/blog/')) {
+    const [, , requestedLocale, ...slugParts] = pathname.split('/')
+    const locale = requestedLocale === 'ar' || requestedLocale === 'en' ? requestedLocale : language
+    let slug = slugParts.join('/')
+    try { slug = decodeURIComponent(slug) } catch { slug = '' }
+    pageContent = slug
+      ? <BlogArticlePage locale={locale} slug={slug} language={language} onLanguageChange={setLanguage} navigate={navigate} />
+      : <BlogPage locale={locale} language={language} onLanguageChange={setLanguage} navigate={navigate} />
   } else if (pathname === '/contact') {
     pageContent = <ContactPage language={language} />
   } else if (pathname !== '/home') {
@@ -158,11 +167,9 @@ export default function App() {
   } else {
     pageContent = (
       <main className="page" aria-label={text.pageLabel}>
-        <div className="language-switcher-position">
-          <LanguageSwitcher language={language} onLanguageChange={setLanguage} />
-        </div>
-        <div className="theme-switcher-position">
+        <div className="page-switchers switcher-cluster">
           <ThemeSwitcher />
+          <LanguageSwitcher language={language} onLanguageChange={setLanguage} />
         </div>
       </main>
     )
@@ -190,7 +197,7 @@ export default function App() {
             onItemSelect={(index) => {
               if (index === 0) navigate('/home')
               if (index === 1) navigate('/works')
-              if (index === 2) navigate('/blog')
+              if (index === 2) navigate(`/blog/${language}`)
               if (index === 3) navigate('/contact')
             }}
           />

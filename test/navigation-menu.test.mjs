@@ -19,10 +19,11 @@ test('the floating menu remains outside the routed page content', () => {
 test('the floating menu labels each route and navigates to every public page', () => {
   assert.match(appSource, /pathname === '\/home'\) return text\.menuLabel/)
   assert.match(appSource, /pathname\.startsWith\('\/works'\)\) return text\.items\[1\]/)
-  assert.match(appSource, /pathname === '\/blog'\) return text\.items\[2\]/)
+  assert.match(appSource, /pathname\.startsWith\('\/blog'\)\) return text\.items\[2\]/)
   assert.match(appSource, /pathname === '\/contact'\) return text\.items\[3\]/)
 
-  for (const destination of ['/home', '/works', '/blog', '/contact']) {
+  for (const destination of ['/home', '/works', '/contact']) {
     assert.match(appSource, new RegExp(`navigate\\('${destination}'\\)`))
   }
+  assert.match(appSource, /navigate\(`\/blog\/\$\{language\}`\)/)
 })

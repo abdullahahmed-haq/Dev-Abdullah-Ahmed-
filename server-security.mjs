@@ -155,13 +155,14 @@ export function getSecurityHeaders({ development, hsts = false }) {
     "default-src 'self'",
     "base-uri 'self'",
     connectSource,
-    "font-src 'self'",
+    "font-src 'self' https://fonts.gstatic.com",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    "img-src 'self' data:",
+    "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
+    "img-src 'self' data: https:",
     "object-src 'none'",
     scriptSource,
-    "style-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
     ...(!development ? ['upgrade-insecure-requests'] : []),
   ].join('; ')
 

@@ -129,7 +129,7 @@ export default function Dashboard({ language = 'ar', onLanguageChange }) {
             <h1>{sections.find((section) => section.id === activeSection)?.label}</h1>
           </div>
           <div className="dashboard-header-actions">
-            <div className="dashboard-header-switchers" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="dashboard-header-switchers switcher-cluster" dir={language === 'ar' ? 'rtl' : 'ltr'}>
               <ThemeSwitcher />
               <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
             </div>

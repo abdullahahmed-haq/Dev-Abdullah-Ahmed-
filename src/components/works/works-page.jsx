@@ -12,11 +12,11 @@ import './works-page.css'
 
 const copy = {
   ar: {
-    eyebrow: 'أرشيف مختار', title: 'الأعمال', description: 'كل مجلد يحكي قصة مشروع. اضغط على المجلد لعرض حركته ثم فتح تفاصيله.', emptyTitle: 'لا توجد مشاريع حتى الآن', emptyText: 'سجّل دخول المدير ثم أضف أول عمل من هذه الصفحة.', dashboard: 'لوحة التحكم', home: 'الرئيسية', backToWorks: 'العودة إلى الأعمال', editProject: 'تعديل المشروع', open: 'فتح مجلد', close: 'إغلاق مجلد', uncategorized: 'مشروع', noLink: 'قيد التجهيز',
+    eyebrow: 'أرشيف مختار', title: 'الأعمال', description: 'كل مجلد يحكي قصة مشروع. اضغط على المجلد لعرض حركته ثم فتح تفاصيله.', emptyTitle: 'لا توجد مشاريع حتى الآن', emptyText: 'سجّل دخول المدير ثم أضف أول عمل من هذه الصفحة.', dashboard: 'لوحة التحكم', home: 'الرئيسية', backToWorks: 'العودة إلى الأعمال', editProject: 'تعديل', open: 'فتح مجلد', close: 'إغلاق مجلد', uncategorized: 'مشروع', noLink: 'قيد التجهيز',
     addWork: 'إضافة عمل جديد', editWork: 'تعديل', deleteWork: 'حذف', moreActions: 'خيارات المشروع', confirmDelete: 'هل تريد حذف هذا المشروع نهائيًا؟', saveFailed: 'تعذر حفظ التعديل على الخادم.', editorEyebrow: 'إدارة الأعمال', closeEditor: 'إغلاق النافذة', projectName: 'اسم المشروع', category: 'التصنيف', url: 'الرابط', folderColor: 'لون المجلد', cancel: 'إلغاء', save: 'حفظ المشروع',
   },
   en: {
-    eyebrow: 'Selected archive', title: 'Works', description: 'Select a folder to play its animation, then open its details page.', emptyTitle: 'No projects yet', emptyText: 'Sign in as admin, then add your first work from this page.', dashboard: 'Dashboard', home: 'Home', backToWorks: 'Back to works', editProject: 'Edit project', open: 'Open folder', close: 'Close folder', uncategorized: 'Project', noLink: 'In progress',
+    eyebrow: 'Selected archive', title: 'Works', description: 'Select a folder to play its animation, then open its details page.', emptyTitle: 'No projects yet', emptyText: 'Sign in as admin, then add your first work from this page.', dashboard: 'Dashboard', home: 'Home', backToWorks: 'Back to works', editProject: 'Edit', open: 'Open folder', close: 'Close folder', uncategorized: 'Project', noLink: 'In progress',
     addWork: 'Add new work', editWork: 'Edit', deleteWork: 'Delete', moreActions: 'Project options', confirmDelete: 'Delete this project permanently?', saveFailed: 'The change could not be saved on the server.', editorEyebrow: 'Works manager', closeEditor: 'Close dialog', projectName: 'Project name', category: 'Category', url: 'URL', folderColor: 'Folder colour', cancel: 'Cancel', save: 'Save project',
   },
 }
@@ -217,8 +217,10 @@ export default function WorksPage({ language, onLanguageChange, navigate }) {
         <a className="works-home-link" href="/home"><BackArrow aria-hidden="true" />{text.home}</a>
         <div className="works-controls" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <a className="works-dashboard-link" href="/"><LayoutDashboard aria-hidden="true" /><span>{text.dashboard}</span></a>
-          <ThemeSwitcher />
-          <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
+          <div className="works-switchers switcher-cluster">
+            <ThemeSwitcher />
+            <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
+          </div>
         </div>
       </header>
 

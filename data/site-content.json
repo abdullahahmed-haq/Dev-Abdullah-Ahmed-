@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 2,
   "profile": {
     "name": "عبدالله أحمد",
     "role": "مصمم ومطور واجهات",
@@ -7,18 +8,45 @@
   },
   "projects": [
     {
-      "id": "fe1a92eb-b579-475b-8fde-e484daccb331",
-      "title": "عبدالله",
-      "type": "اعمال شغب",
-      "url": "",
-      "color": "#d5aa21"
-    },
-    {
-      "id": "4f033612-c0fb-4454-8b38-7e0147ae5272",
-      "title": "ulg",
-      "type": "عمل",
-      "url": "",
-      "color": "#4c6be6"
+      "schemaVersion": 2,
+      "id": "0bef724a-650f-4caa-844c-7585f81e2ec8",
+      "color": "#d5aa21",
+      "createdAt": "1970-01-01T00:00:00.000Z",
+      "updatedAt": "1970-01-01T00:00:00.000Z",
+      "publishedAt": "1970-01-01T00:00:00.000Z",
+      "document": {
+        "title": {
+          "ar": "بتنيرد",
+          "en": "بتنيرد"
+        },
+        "category": {
+          "ar": "تنطد",
+          "en": "تنطد"
+        },
+        "summary": {
+          "ar": "",
+          "en": ""
+        },
+        "client": {
+          "ar": "",
+          "en": ""
+        },
+        "role": {
+          "ar": "",
+          "en": ""
+        },
+        "duration": {
+          "ar": "",
+          "en": ""
+        },
+        "startDate": "",
+        "endDate": "",
+        "year": "",
+        "externalUrl": "",
+        "cover": null,
+        "tools": [],
+        "sections": []
+      }
     }
   ],
   "settings": {

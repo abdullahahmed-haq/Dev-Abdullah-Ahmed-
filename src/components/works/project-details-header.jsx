@@ -17,7 +17,7 @@ export default function ProjectDetailsHeader({ language, onLanguageChange, text,
           onBack()
         }}>{backContent}</a>
       )}
-      <div className="project-details-actions" dir={language === 'ar' ? 'rtl' : 'ltr'}>
+      <div className="project-details-actions switcher-cluster" dir={language === 'ar' ? 'rtl' : 'ltr'}>
         <ThemeSwitcher />
         <LanguageSwitcher language={language} onLanguageChange={onLanguageChange} />
       </div>

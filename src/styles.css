@@ -281,17 +281,22 @@ html[dir='ltr'] .dashboard-page.is-sidebar-collapsed { grid-template-columns: 76
 }
 
 
-.theme-switcher-position {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-}
-
-.language-switcher-position {
+.page-switchers {
   position: fixed;
   top: 24px;
   left: 24px;
 }
+
+html[lang='en'] .page-switchers { right: 24px; left: auto; }
+
+.switcher-cluster {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+}
+
+html[lang='en'] .switcher-cluster { flex-direction: row-reverse; }
 
 .language-switcher {
   display: flex;
@@ -409,15 +414,12 @@ html[dir='ltr'] .dashboard-page.is-sidebar-collapsed { grid-template-columns: 76
 }
 
 @media (max-width: 480px) {
-  .theme-switcher-position {
-    top: 16px;
-    right: 16px;
-  }
-
-  .language-switcher-position {
+  .page-switchers {
     top: 16px;
     left: 16px;
   }
+
+  html[lang='en'] .page-switchers { right: 16px; left: auto; }
 
 }
 

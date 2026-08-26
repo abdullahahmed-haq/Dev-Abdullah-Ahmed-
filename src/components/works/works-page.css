@@ -8,7 +8,7 @@
 .works-topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .works-home-link, .works-dashboard-link { display: inline-flex; align-items: center; gap: 8px; color: inherit; font-size: 13px; text-decoration: none; }
 .works-home-link svg, .works-dashboard-link svg { width: 16px; height: 16px; }
-.works-controls { display: flex; align-items: center; gap: 9px; }
+.works-controls, .works-switchers { display: flex; align-items: center; gap: 9px; }
 .works-controls .theme-switcher, .works-controls .language-switcher { position: static; box-shadow: none; }
 .works-dashboard-link { height: 34px; padding: 0 12px; border: 1px solid var(--theme-border); border-radius: 999px; direction: ltr; }
 

@@ -18,6 +18,11 @@ function text(value, fallback = '', maxLength = 500) {
   return typeof value === 'string' ? value.slice(0, maxLength) : fallback
 }
 
+function localizedText(value, maxLength) {
+  if (!value || typeof value !== 'object') return ''
+  return text(value.ar, text(value.en, '', maxLength), maxLength)
+}
+
 function getLegacyProjectId(project, index) {
   const source = `${project?.title || ''}|${project?.url || ''}|${index}`
   let hash = 0
@@ -42,13 +47,18 @@ export function normalizeSiteContent(value) {
       bio: text(profile.bio, DEFAULT_SITE_CONTENT.profile.bio, 1000),
       email: text(profile.email, DEFAULT_SITE_CONTENT.profile.email, 254),
     },
-    projects: projects.map((project, index) => ({
-      id: text(project?.id, getLegacyProjectId(project, index), 120) || getLegacyProjectId(project, index),
-      title: text(project?.title, '', 180),
-      type: text(project?.type, '', 120),
-      url: text(project?.url, '', 1000),
-      color: /^#[0-9a-f]{6}$/i.test(project?.color || '') ? project.color : DEFAULT_PROJECT_COLOR,
-    })),
+    projects: projects.map((project, index) => {
+      const document = project?.document && typeof project.document === 'object' ? project.document : undefined
+
+      return {
+        ...(document ? { document } : {}),
+        id: text(project?.id, getLegacyProjectId(project, index), 120) || getLegacyProjectId(project, index),
+        title: text(project?.title, localizedText(document?.title, 180), 180),
+        type: text(project?.type, localizedText(document?.category, 120), 120),
+        url: text(project?.url, text(document?.externalUrl, '', 1000), 1000),
+        color: /^#[0-9a-f]{6}$/i.test(project?.color || '') ? project.color : DEFAULT_PROJECT_COLOR,
+      }
+    }),
     settings: {
       siteTitle: text(settings.siteTitle, DEFAULT_SITE_CONTENT.settings.siteTitle, 160),
       availability: typeof settings.availability === 'boolean'
