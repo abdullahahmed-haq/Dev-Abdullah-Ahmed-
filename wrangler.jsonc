@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "my-profile-next",
+  "compatibility_date": "2026-08-26",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "main": "vinext/server/fetch-handler",
+  "assets": {
+    "directory": "dist/client",
+    "not_found_handling": "none",
+    "binding": "ASSETS"
+  },
+  "r2_buckets": [
+    {
+      "binding": "PORTFOLIO_RELEASES",
+      "bucket_name": "my-profile-releases"
+    }
+  ],
+  "cache": {
+    "enabled": true
+  }
+}

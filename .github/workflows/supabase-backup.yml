@@ -1,0 +1,39 @@
+name: Supabase logical backup
+
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      BACKUP_DATABASE_URL: ${{ secrets.SUPABASE_BACKUP_DATABASE_URL }}
+      BACKUP_AGE_RECIPIENT: ${{ secrets.BACKUP_AGE_RECIPIENT }}
+    steps:
+      - name: Validate backup configuration
+        run: |
+          test -n "$BACKUP_DATABASE_URL"
+          test -n "$BACKUP_AGE_RECIPIENT"
+      - name: Install age
+        run: sudo apt-get update && sudo apt-get install -y age
+      - name: Create encrypted logical dump
+        run: |
+          pg_dump --format=custom --no-owner --no-acl --exclude-table-data=public.contact_messages "$BACKUP_DATABASE_URL" > portfolio.dump
+          age --encrypt --recipient "$BACKUP_AGE_RECIPIENT" --output portfolio.dump.age portfolio.dump
+          shasum -a 256 portfolio.dump.age > portfolio.dump.age.sha256
+      - name: Store encrypted backup
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-backup-${{ github.run_id }}
+          path: |
+            portfolio.dump.age
+            portfolio.dump.age.sha256
+          retention-days: 30
+      - name: Purge expired contact messages
+        run: psql "$BACKUP_DATABASE_URL" -v ON_ERROR_STOP=1 -c "delete from public.contact_messages where expires_at <= now();"

@@ -1,0 +1,24 @@
+{
+  "name": "@portfolio/blog-authoring",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./src/schema.js",
+    "./editor": "./src/editor.jsx",
+    "./renderer": "./src/renderer.jsx",
+    "./styles.css": "./src/styles.css"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@blocknote/core": "0.54.0",
+    "@blocknote/mantine": "0.54.0",
+    "@blocknote/react": "0.54.0",
+    "@mantine/core": "8.3.11",
+    "@mantine/hooks": "8.3.11"
+  }
+}
